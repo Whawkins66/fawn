@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<project xmlns:sf="antlib:com.salesforce" name="Fab's Build Process" default="list" basedir=".">
+  <!-- Documentation in progress... -->
+  <!--  -->
+
+	<description>
+	Contains all operations currently supported by the build process.
+	Fabrice Cathala - 14 May 2016
+	</description>
+
+  <property file="build.properties"/>
+  <property environment="env"/>
+
+  <!--  -->
+  <taskdef
+  	resource="com/salesforce/antlib.xml"
+  	uri="antlib:com.salesforce">
+    <classpath>
+        <pathelement location="ant-salesforce.jar" />         
+    </classpath>
+  </taskdef>
+
+  <!-- Retrieve the information on all supported metadata type -->
+  <target name="list">
+    <sf:describeMetadata
+    	username="${sf.usr}"
+    	password="${sf.pwd}"
+    	serverurl="${sf.url}"
+    	resultFilePath="${basedir}/metadata/list.metadata"/>
+  </target>
+
+  <!-- Retrieve the components listed in Salesforce package sf.pkgName -->
+  <target name="retrievePKG">
+    <delete dir="${basedir}/src"/>
+    <mkdir dir="${basedir}/src"/>
+    <sf:retrieve
+    	username="${sf.usr}"
+    	password="${sf.pwd}"
+    	serverurl="${sf.url}"
+    	maxPoll="${sf.maxPoll}"
+    	pollWaitMillis="${sf.pollWaitMillis}"
+    	retrieveTarget="${basedir}/src"
+    	packageNames="${sf.pkg}"
+    	singlePackage="true" />
+  </target>
+
+  <!-- Retrieve the components listed in retrieve/retrieve.xml from your org -->
+  <target name="retrieveXML">
+    <delete dir="${basedir}/src"/>
+    <mkdir dir="${basedir}/src"/>
+    <sf:retrieve
+    	username="${sf.usr}"
+    	password="${sf.pwd}"
+    	serverurl="${sf.url}"
+    	maxPoll="${sf.maxPoll}"
+    	pollWaitMillis="${sf.pollWaitMillis}"
+    	retrieveTarget="${basedir}/src"
+    	unpackaged="${basedir}/retrieve/package.xml" />
+  </target>
+
+	<!-- Deploy the unpackaged set of metadata retrieved with retrieveUnpackaged and run tests in this organization's namespace only-->
+	<target name="checkOnly">
+	  <sf:deploy
+      	username="${sf.usr}"
+      	password="${sf.pwd}"
+      	serverurl="${sf.url}"
+      	maxPoll="${sf.maxPoll}"
+      	pollWaitMillis="${sf.pollWaitMillis}"
+      	deployRoot="${basedir}/src"
+   	  	rollbackOnError="true"
+	  	checkOnly="true"/>
+	</target>
+
+  <!-- Deploy the set of metadata stored in src and run tests -->
+  <target name="deploy">
+    <sf:deploy
+    	username="${sf.usr}"
+    	password="${sf.pwd}"
+    	serverurl="${sf.url}"
+    	maxPoll="${sf.maxPoll}"
+    	pollWaitMillis="${sf.pollWaitMillis}"
+    	deployRoot="${basedir}/src"
+    	rollbackOnError="true"/>
+  </target>
+
+  <!-- Undeploy components -->
+  <target name="unDeploy">
+    <sf:deploy
+    	username="${sf.usr}"
+    	password="${sf.pwd}"
+    	serverurl="${sf.url}"
+    	maxPoll="${sf.maxPoll}"
+    	pollWaitMillis="${sf.pollWaitMillis}"
+    	deployRoot="${basedir}/undeploy"/>
+  </target>
+
+</project>
