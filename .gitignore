@@ -1,8 +1,8 @@
 # Configuration files
 # These files can contain confidential information and are not synchronised
-faw.config.cmd
-faw.orgs.cmd
-faw.pkg.cmd
+fawn.config.cmd
+fawn.orgs.cmd
+fawn.pkg.cmd
 
 # Log files
 *.log
