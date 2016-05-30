@@ -2,20 +2,20 @@
 
 REM ===============================================================
 
-REM	faw: Force.com Ant Wrapper
+REM	fawn: Force.com Ant Wrapper Navigator
 
 REM © Fabrice Cathala - 14 May 2016
 
 REM ===============================================================
 
 	REM faw setup parameters
-	Call faw.config.cmd
+	Call fawn.config.cmd
 
 	REM Orgs connections information
-	Call faw.orgs.cmd
+	Call fawn.orgs.cmd
 
 	REM Change Set names
-	Call faw.pkg.cmd
+	Call fawn.pkg.cmd
 
 REM ===============================================================
 
